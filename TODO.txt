@@ -1,0 +1,14 @@
+
+-> github repo -> check
+-> phaser game skeleton -> check
+-> server -> check
+
+-> main menu design
+-> game design
+-> blank prototype game
+
+-> merge design and prototype
+
+-> sound design
+-> highscore
+-> instructions
