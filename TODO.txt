@@ -1,8 +1,8 @@
-
+ACT I -> check
 -> github repo -> check
 -> phaser game skeleton -> check
 -> server -> check
-
+ACT II
 -> main menu design
 -> game design
 -> blank prototype game

@@ -1,6 +1,6 @@
 var Vakond = Vakond || {};
 
-Vakond.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '');
+Vakond.game = new Phaser.Game(640, 480, Phaser.CANVAS, '');
 
 Vakond.game.state.add('Boot', Vakond.Boot);
 Vakond.game.state.add('Preload', Vakond.Preload);
