@@ -6,6 +6,11 @@ ACT II
 -> main menu design
 -> game design
 -> blank prototype game
+    -> die and skip to main menu if player velocity.y > ???
+        -> hull damage
+    -> loose gas on mining
+        -> fill up gas in gas station for score
+        -> die if empty gas
 
 -> merge design and prototype
 
