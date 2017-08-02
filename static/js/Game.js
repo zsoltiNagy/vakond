@@ -19,6 +19,20 @@ Vakond.Game.prototype = {
         }
         this.grounds.setAll('body.allowGravity', false);
         this.grounds.setAll('body.immovable', true);
+        // Audio
+        var music = this.add.audio('music');
+        music.play();
+        var mute = this.game.add.button(600, 10, 'mute', function () {
+            if(this.game.sound) {
+                this.game.sound.mute = true;
+            } else {
+                this.game.sound.mute = false;
+            }
+        }, this, 2,1,0);
+        mute.width = 30;
+        mute.height = 30;
+        mute.fixedToCamera = true;
+        
         // Gems
         this.gems = this.add.physicsGroup();
         for (let counter = 0; counter < 30; counter++) {
@@ -55,24 +69,24 @@ Vakond.Game.prototype = {
 
         // playerVelocity
         this.playerVelocityY = 0;
-        playerVelocityYText = this.add.text(16, 48, 'playerVelocityY: ', { fontSize: '32px', fill: '#000' });
+        playerVelocityYText = this.add.text(16, 48, 'playerVelocityY: ', { fontSize: '12px', fill: '#000' });
         playerVelocityYText.text = 'playerVelocityY: ' + this.playerVelocityY;
         playerVelocityYText.fixedToCamera = true;
         // Hull
         this.playerHull = 200;
-        playerHullText = this.add.text(16, 80, 'playerHull: ', { fontSize: '32px', fill: '#000'});
+        playerHullText = this.add.text(16, 80, 'playerHull: ', { fontSize: '12px', fill: '#000'});
         playerHullText.text = 'playerHull: ' + this.playerHull;
         playerHullText.fixedToCamera = true;
         // Fuel
         this.playerFuel = 15;
-        playerFuelText = this.add.text(16, 112, 'playerFuel: ', { fontSize: '32px', fill: '#000'});
+        playerFuelText = this.add.text(16, 112, 'playerFuel: ', { fontSize: '12px', fill: '#000'});
         playerFuelText.text = 'playerFuel: ' + this.playerFuel;
         playerFuelText.fixedToCamera = true;
         // Controls
         cursors = this.input.keyboard.createCursorKeys();
         // Score
         this.playerScore = 0;
-        scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
+        scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '12px', fill: '#000' });
         scoreText.text = 'Score: ' + this.playerScore;
         scoreText.fixedToCamera = true;
         // Ground Particle Emitter
@@ -92,7 +106,7 @@ Vakond.Game.prototype = {
         
     },
 
-    collisionHandler: function(player, ground){
+    collisionHandler: function(player, ground, drillSound){
         let playerUnderground = this.player.body.touching.down && player.y > 272 && !cursors.down.isDown
         let playerBuildingOverlap = this.physics.arcade.overlap(this.player, this.fuelStation) || this.physics.arcade.overlap(this.player, this.repairStation)
         if (cursors.up.isDown) {
@@ -116,7 +130,6 @@ Vakond.Game.prototype = {
             this.fuelUsage(0.1);
         }
     },
-
     gemPicker: function(player, gem) {
         gem.kill()
         this.playerScore += 10;
@@ -172,7 +185,6 @@ Vakond.Game.prototype = {
             this.playerHullDamage(damage);
         }
     },
-
     update: function() {
         //the camera will follow the player in the world
         this.game.camera.follow(this.player);

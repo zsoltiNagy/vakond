@@ -16,8 +16,11 @@ Vakond.Preload.prototype = {
     this.load.image('button', '/static/assets/images/button.png');
     this.load.image('background', '/static/assets/images/back.jpg');
     this.load.image('mole', '/static/assets/images/mole.png');
+    this.load.image('mute', '/static/assets/images/mute.png');
     this.load.image('ground-particle', '/static/assets/images/vakond-small-ground.png');
-    this.load.spritesheet('player', '/static/assets/images/vakond-player-sprite.png', 32, 32)
+    this.load.spritesheet('player', '/static/assets/images/vakond-player-sprite.png', 32, 32);
+    this.load.audio('music', '/static/assets/audio/vakond_basic.wav');
+    this.load.audio('drill', '/static/assets/audio/drill_sound.wav');
   },
   create: function() {
   	this.state.start('MainMenu');
