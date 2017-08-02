@@ -6,12 +6,14 @@ Vakond.Game.prototype = {
     create: function() {
         // World size
         this.world.resize(800, 1920);
+        // Global variables
+        this.groundFloor = 240;
         // Background
-        this.sky = this.add.tileSprite(0, 0, this.world.width, 240, 'sky');
-        this.cave = this.add.tileSprite(0, 240, this.world.width, this.world.height, 'cave');
+        this.sky = this.add.tileSprite(0, 0, this.world.width, this.groundFloor, 'sky');
+        this.cave = this.add.tileSprite(0, this.groundFloor, this.world.width, this.world.height, 'cave');
         // Grounds
         this.grounds = this.add.physicsGroup();
-        for (let y = 240; y < this.world.height; y += 16) {
+        for (let y = this.groundFloor; y < this.world.height; y += 16) {
 
             for (let x = 0; x < this.world.width; x += 16) {
                 var ground = this.grounds.create(x, y, 'ground');
@@ -23,23 +25,21 @@ Vakond.Game.prototype = {
         // Gems
         this.gems = this.add.physicsGroup();
         for (let counter = 0; counter < 100; counter++) {
-            //let x = this.rnd.between(0, this.world.width);
-            let x = Math.floor(Math.random() * (this.world.width - 0 + 1)) + 0;
-            //let y = this.rnd.between(240, this.world.height);
-            let y = Math.floor(Math.random() * (this.world.height - 260 + 1)) + 260;
-            var gem = this.gems.create(x, y, 'gems', Math.floor(Math.random() * (3 - 0 + 1)) + 0);
+            let x = this.getRandomInt(0, this.world.width);
+            let y = this.getRandomInt(this.groundFloor+20, this.world.height);
+            var gem = this.gems.create(x, y, 'gems', this.getRandomInt(0, 3));
             gem.scale.setTo(2, 2);
         }
         this.gems.setAll('body.allowGravity', false);
         this.gems.setAll('body.immovable', true);
         // Fuel Station
-        this.fuelStation = this.add.sprite(64, 176, 'building');
+        this.fuelStation = this.add.sprite(64, this.groundFloor-64, 'building');
         this.physics.arcade.enable(this.fuelStation);
         this.fuelStation.scale.setTo(2, 2);
         this.fuelStation.body.allowGravity = false;
         this.fuelStation.body.immovable = true;
         // Repair Station
-        this.repairStation = this.add.sprite(384, 176, 'building');
+        this.repairStation = this.add.sprite(384, this.groundFloor-64, 'building');
         this.physics.arcade.enable(this.repairStation);
         this.repairStation.scale.setTo(2, 2);
         this.repairStation.body.allowGravity = false;
@@ -91,12 +91,12 @@ Vakond.Game.prototype = {
         this.groundParticleEmitter.start(true, 4000, null, 1);
     },
 
-    playerBuildingOverlap: function() {
-        
+    getRandomInt: function(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
     collisionHandler: function(player, ground){
-        let playerUnderground = this.player.body.touching.down && player.y > 272 && !cursors.down.isDown
+        let playerUnderground = this.player.body.touching.down && player.y > this.groundFloor+32 && !cursors.down.isDown
         let playerBuildingOverlap = this.physics.arcade.overlap(this.player, this.fuelStation) || this.physics.arcade.overlap(this.player, this.repairStation)
         if (cursors.up.isDown) {
             this.player.body.velocity.y = 0;
@@ -212,5 +212,5 @@ Vakond.Game.prototype = {
         // Sprite debug info
         // this.game.debug.spriteInfo(this.player, 32, 32);
         // this.game.debug.spriteCoords(this.player, 32, 128);
-}
+    }
 };
