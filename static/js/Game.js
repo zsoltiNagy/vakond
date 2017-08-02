@@ -46,7 +46,7 @@ Vakond.Game.prototype = {
         this.physics.arcade.enable(this.player);
         this.player.body.collideWorldBounds = true;
         this.player.body.bounce.y = 0.2;
-        this.player.body.gravity.y = 300;
+        this.player.body.gravity.y = 800;
         this.player.scale.setTo(1.2, 1.2);
         this.player.anchor.setTo(0.5);
 
@@ -75,25 +75,44 @@ Vakond.Game.prototype = {
         scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
         scoreText.text = 'Score: ' + this.playerScore;
         scoreText.fixedToCamera = true;
+        // Ground Particle Emitter
+        this.groundParticleEmitter = this.add.emitter();
+        this.groundParticleEmitter.makeParticles('ground-particle');
+        this.groundParticleEmitter.gravity = 400;
+        this.groundParticleEmitter.bounce.setTo(10,10);
+    },
+
+    groundStorm: function(x,y) {
+        this.groundParticleEmitter.x = x;
+        this.groundParticleEmitter.y = y;
+        this.groundParticleEmitter.start(true, 4000, null, 1);
+    },
+
+    playerBuildingOverlap: function() {
+        
     },
 
     collisionHandler: function(player, ground){
-        var playerUnderground = this.player.body.touching.down && player.y > 272 && !cursors.down.isDown
+        let playerUnderground = this.player.body.touching.down && player.y > 272 && !cursors.down.isDown
+        let playerBuildingOverlap = this.physics.arcade.overlap(this.player, this.fuelStation) || this.physics.arcade.overlap(this.player, this.repairStation)
         if (cursors.up.isDown) {
             this.player.body.velocity.y = 0;
             this.fuelUsage(0.05);
             this.player.animations.play('fly');
-        } else if (cursors.down.isDown && ground.body.touching.up) {
+        } else if (cursors.down.isDown && ground.body.touching.up && !playerBuildingOverlap) {
             this.player.animations.play('mine');
+            this.groundStorm(ground.x, ground.y);
             ground.kill();
             this.fuelUsage(0.1);
         } else if (cursors.right.isDown && playerUnderground && ground.body.touching.left) {
             this.player.animations.play('mine');
             ground.kill();
+            this.groundStorm(ground.x, ground.y);
             this.fuelUsage(0.1);
-        } else if (cursors.left.isDown && playerUnderground && ground.body.touching.right) {
+        } else if (cursors.left.isDown && playerUnderground && this.player.body.touching.left && !ground.body.touching.up) {
             this.player.animations.play('mine');
             ground.kill();
+            this.groundStorm(ground.x, ground.y);
             this.fuelUsage(0.1);
         }
     },
@@ -126,15 +145,15 @@ Vakond.Game.prototype = {
     repairHull: function(){
         money = this.playerScore;
         damagedHull = 200 - this.playerHull;
-        if (money >= missingFuel) {
-            this.playerFuel = 15;
-            this.playerScore = money - missingFuel;
-        } else if (money < missingFuel && money > 0) {
-            this.playerFuel += money;
+        if (money >= damagedHull) {
+            this.playerHull = 200;
+            this.playerScore = money - damagedHull;
+        } else if (money < damagedHull && money > 0) {
+            this.playerHull += money;
             this.playerScore = 0;
         }
         scoreText.text = 'Score: ' + this.playerScore;
-        playerFuelText.text= 'playerFuel: ' + this.playerFuel;
+        playerHullText.text= 'playerHull: ' + this.playerHull;
     },
 
     playerHullDamage: function(number) {
@@ -148,8 +167,8 @@ Vakond.Game.prototype = {
 
     playerFall: function(){
         playerVelocityYText.text = 'playerVelocityY: ' + this.player.body.velocity.y;
-        if (this.player.body.velocity.y > 300) {
-            let damage = (this.player.body.velocity.y - 300) / 4
+        if (this.player.body.velocity.y > 500) {
+            let damage = (this.player.body.velocity.y - 500) / 4
             this.playerHullDamage(damage);
         }
     },
@@ -170,14 +189,14 @@ Vakond.Game.prototype = {
 
         if (cursors.left.isDown) {
             this.player.animations.play('mine');
-            this.player.body.velocity.x = -155;
+            this.player.body.velocity.x = -200;
             this.fuelUsage(0.005);
         } else if (cursors.right.isDown) {
             this.player.animations.play('mine');
-            this.player.body.velocity.x = 150;
+            this.player.body.velocity.x = 200;
             this.fuelUsage(0.005);
         } else if (cursors.up.isDown) {
-            this.player.body.velocity.y = -150;
+            this.player.body.velocity.y = -300;
             this.fuelUsage(0.005);
         } else if (cursors.down.isDown) {
             this.player.animations.play('mine');
