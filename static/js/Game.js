@@ -162,8 +162,8 @@ Vakond.Game.prototype = {
 
     playerFall: function(){
         playerVelocityYText.text = 'playerVelocityY: ' + this.player.body.velocity.y;
-        if (this.player.body.velocity.y > 300) {
-            let damage = (this.player.body.velocity.y - 300) / 4
+        if (this.player.body.velocity.y > 500) {
+            let damage = (this.player.body.velocity.y - 500) / 4
             this.playerHullDamage(damage);
         }
     },
@@ -184,14 +184,14 @@ Vakond.Game.prototype = {
 
         if (cursors.left.isDown) {
             this.player.animations.play('mine');
-            this.player.body.velocity.x = -155;
+            this.player.body.velocity.x = -200;
             this.fuelUsage(0.005);
         } else if (cursors.right.isDown) {
             this.player.animations.play('mine');
-            this.player.body.velocity.x = 150;
+            this.player.body.velocity.x = 200;
             this.fuelUsage(0.005);
         } else if (cursors.up.isDown) {
-            this.player.body.velocity.y = -150;
+            this.player.body.velocity.y = -300;
             this.fuelUsage(0.005);
         } else if (cursors.down.isDown) {
             this.player.animations.play('mine');
