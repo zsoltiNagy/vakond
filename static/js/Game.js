@@ -104,7 +104,7 @@ Vakond.Game.prototype = {
             ground.kill();
             this.groundStorm(ground.x, ground.y);
             this.fuelUsage(0.1);
-        } else if (cursors.left.isDown && playerUnderground && ground.body.touching.right) {
+        } else if (cursors.left.isDown && playerUnderground && this.player.body.touching.left && !ground.body.touching.up) {
             this.player.animations.play('mine');
             ground.kill();
             this.groundStorm(ground.x, ground.y);
@@ -140,15 +140,15 @@ Vakond.Game.prototype = {
     repairHull: function(){
         money = this.playerScore;
         damagedHull = 200 - this.playerHull;
-        if (money >= missingFuel) {
-            this.playerFuel = 15;
-            this.playerScore = money - missingFuel;
-        } else if (money < missingFuel && money > 0) {
-            this.playerFuel += money;
+        if (money >= damagedHull) {
+            this.playerHull = 200;
+            this.playerScore = money - damagedHull;
+        } else if (money < damagedHull && money > 0) {
+            this.playerHull += money;
             this.playerScore = 0;
         }
         scoreText.text = 'Score: ' + this.playerScore;
-        playerFuelText.text= 'playerFuel: ' + this.playerFuel;
+        playerHullText.text= 'playerHull: ' + this.playerHull;
     },
 
     playerHullDamage: function(number) {
@@ -204,7 +204,7 @@ Vakond.Game.prototype = {
 
     render: function() {
         // Sprite debug info
-        // this.game.debug.spriteInfo(this.player, 32, 32);
-        // this.game.debug.spriteCoords(this.player, 32, 128);
+        this.game.debug.spriteInfo(this.player, 32, 32);
+        this.game.debug.spriteCoords(this.player, 32, 128);
 }
 };
