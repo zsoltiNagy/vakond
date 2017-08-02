@@ -88,13 +88,18 @@ Vakond.Game.prototype = {
         this.groundParticleEmitter.start(true, 4000, null, 1);
     },
 
+    playerBuildingOverlap: function() {
+        
+    },
+
     collisionHandler: function(player, ground){
-        var playerUnderground = this.player.body.touching.down && player.y > 272 && !cursors.down.isDown
+        let playerUnderground = this.player.body.touching.down && player.y > 272 && !cursors.down.isDown
+        let playerBuildingOverlap = this.physics.arcade.overlap(this.player, this.fuelStation) || this.physics.arcade.overlap(this.player, this.repairStation)
         if (cursors.up.isDown) {
             this.player.body.velocity.y = 0;
             this.fuelUsage(0.05);
             this.player.animations.play('fly');
-        } else if (cursors.down.isDown && ground.body.touching.up) {
+        } else if (cursors.down.isDown && ground.body.touching.up && !playerBuildingOverlap) {
             this.player.animations.play('mine');
             this.groundStorm(ground.x, ground.y);
             ground.kill();
