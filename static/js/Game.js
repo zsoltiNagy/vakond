@@ -46,7 +46,7 @@ Vakond.Game.prototype = {
         this.physics.arcade.enable(this.player);
         this.player.body.collideWorldBounds = true;
         this.player.body.bounce.y = 0.2;
-        this.player.body.gravity.y = 300;
+        this.player.body.gravity.y = 800;
         this.player.scale.setTo(1.2, 1.2);
         this.player.anchor.setTo(0.5);
 
@@ -78,7 +78,7 @@ Vakond.Game.prototype = {
         // Ground Particle Emitter
         this.groundParticleEmitter = this.add.emitter();
         this.groundParticleEmitter.makeParticles('ground-particle');
-        this.groundParticleEmitter.gravity = 200;
+        this.groundParticleEmitter.gravity = 400;
         this.groundParticleEmitter.bounce.setTo(10,10);
     },
 
@@ -204,7 +204,7 @@ Vakond.Game.prototype = {
 
     render: function() {
         // Sprite debug info
-        this.game.debug.spriteInfo(this.player, 32, 32);
-        this.game.debug.spriteCoords(this.player, 32, 128);
+        // this.game.debug.spriteInfo(this.player, 32, 32);
+        // this.game.debug.spriteCoords(this.player, 32, 128);
 }
 };
