@@ -105,12 +105,10 @@ Vakond.Game.prototype = {
             ground.kill();
             this.fuelUsage(0.1);
         } else if (cursors.right.isDown && playerUnderground && ground.body.touching.left) {
-            this.player.animations.play('mine');
             ground.kill();
             this.groundStorm(ground.x, ground.y);
             this.fuelUsage(0.1);
-        } else if (cursors.left.isDown && playerUnderground && this.player.body.touching.left && !ground.body.touching.up) {
-            this.player.animations.play('mine');
+        } else if (cursors.left.isDown && playerUnderground && ground.body.touching.right && !ground.body.touching.up) {
             ground.kill();
             this.groundStorm(ground.x, ground.y);
             this.fuelUsage(0.1);
@@ -199,7 +197,7 @@ Vakond.Game.prototype = {
             this.player.body.velocity.y = -300;
             this.fuelUsage(0.005);
         } else if (cursors.down.isDown) {
-            this.player.animations.play('mine');
+            //
         } else {
             this.player.body.velocity.x = 0;
             this.player.animations.stop();
