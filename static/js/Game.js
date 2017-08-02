@@ -75,6 +75,17 @@ Vakond.Game.prototype = {
         scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
         scoreText.text = 'Score: ' + this.playerScore;
         scoreText.fixedToCamera = true;
+        // Ground Particle Emitter
+        this.groundParticleEmitter = this.add.emitter();
+        this.groundParticleEmitter.makeParticles('ground-particle');
+        this.groundParticleEmitter.gravity = 200;
+        this.groundParticleEmitter.bounce.setTo(10,10);
+    },
+
+    groundStorm: function(x,y) {
+        this.groundParticleEmitter.x = x;
+        this.groundParticleEmitter.y = y;
+        this.groundParticleEmitter.start(true, 4000, null, 1);
     },
 
     collisionHandler: function(player, ground){
@@ -85,15 +96,18 @@ Vakond.Game.prototype = {
             this.player.animations.play('fly');
         } else if (cursors.down.isDown && ground.body.touching.up) {
             this.player.animations.play('mine');
+            this.groundStorm(ground.x, ground.y);
             ground.kill();
             this.fuelUsage(0.1);
         } else if (cursors.right.isDown && playerUnderground && ground.body.touching.left) {
             this.player.animations.play('mine');
             ground.kill();
+            this.groundStorm(ground.x, ground.y);
             this.fuelUsage(0.1);
         } else if (cursors.left.isDown && playerUnderground && ground.body.touching.right) {
             this.player.animations.play('mine');
             ground.kill();
+            this.groundStorm(ground.x, ground.y);
             this.fuelUsage(0.1);
         }
     },
