@@ -35,6 +35,12 @@ Vakond.Game.prototype = {
         this.fuelStation.scale.setTo(2, 2);
         this.fuelStation.body.allowGravity = false;
         this.fuelStation.body.immovable = true;
+        // Repair Station
+        this.repairStation = this.add.sprite(384, 176, 'building');
+        this.physics.arcade.enable(this.repairStation);
+        this.repairStation.scale.setTo(2, 2);
+        this.repairStation.body.allowGravity = false;
+        this.repairStation.body.immovable = true;
         // Player
         this.player = this.add.sprite(0, 0, 'player');
         this.physics.arcade.enable(this.player);
@@ -43,6 +49,10 @@ Vakond.Game.prototype = {
         this.player.body.gravity.y = 300;
         this.player.scale.setTo(1.2, 1.2);
         this.player.anchor.setTo(0.5);
+
+        this.player.animations.add('mine', [0,1,2,3], 20, true);
+        this.player.animations.add('fly', [4,5], 20, true);
+
         // playerVelocity
         this.playerVelocityY = 0;
         playerVelocityYText = this.add.text(16, 48, 'playerVelocityY: ', { fontSize: '32px', fill: '#000' });
@@ -72,13 +82,17 @@ Vakond.Game.prototype = {
         if (cursors.up.isDown) {
             this.player.body.velocity.y = 0;
             this.fuelUsage(0.05);
+            this.player.animations.play('fly');
         } else if (cursors.down.isDown && ground.body.touching.up) {
+            this.player.animations.play('mine');
             ground.kill();
             this.fuelUsage(0.1);
         } else if (cursors.right.isDown && playerUnderground && ground.body.touching.left) {
+            this.player.animations.play('mine');
             ground.kill();
             this.fuelUsage(0.1);
         } else if (cursors.left.isDown && playerUnderground && ground.body.touching.right) {
+            this.player.animations.play('mine');
             ground.kill();
             this.fuelUsage(0.1);
         }
@@ -107,7 +121,20 @@ Vakond.Game.prototype = {
         }
         scoreText.text = 'Score: ' + this.playerScore;
         playerFuelText.text= 'playerFuel: ' + this.playerFuel;
-        
+    },
+
+    repairHull: function(){
+        money = this.playerScore;
+        damagedHull = 200 - this.playerHull;
+        if (money >= missingFuel) {
+            this.playerFuel = 15;
+            this.playerScore = money - missingFuel;
+        } else if (money < missingFuel && money > 0) {
+            this.playerFuel += money;
+            this.playerScore = 0;
+        }
+        scoreText.text = 'Score: ' + this.playerScore;
+        playerFuelText.text= 'playerFuel: ' + this.playerFuel;
     },
 
     playerHullDamage: function(number) {
@@ -139,17 +166,25 @@ Vakond.Game.prototype = {
 
         this.physics.arcade.overlap(this.player, this.fuelStation, this.fillFuel, null, this);
 
+        this.physics.arcade.overlap(this.player, this.repairStation, this.repairHull, null, this);
+
         if (cursors.left.isDown) {
-            this.player.body.velocity.x = -150;
+            this.player.animations.play('mine');
+            this.player.body.velocity.x = -155;
             this.fuelUsage(0.005);
         } else if (cursors.right.isDown) {
+            this.player.animations.play('mine');
             this.player.body.velocity.x = 150;
             this.fuelUsage(0.005);
         } else if (cursors.up.isDown) {
             this.player.body.velocity.y = -150;
             this.fuelUsage(0.005);
+        } else if (cursors.down.isDown) {
+            this.player.animations.play('mine');
         } else {
             this.player.body.velocity.x = 0;
+            this.player.animations.stop();
+            this.player.frame = 0;
         }
     },
 
