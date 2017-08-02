@@ -7,7 +7,8 @@ Vakond.Game.prototype = {
         // World size
         this.world.resize(800, 1920);
         // Background
-        this.sky = this.add.tileSprite(0, 0, this.world.width, this.world.height, 'sky');
+        this.sky = this.add.tileSprite(0, 0, this.world.width, 240, 'sky');
+        this.cave = this.add.tileSprite(0, 240, this.world.width, this.world.height, 'cave');
         // Grounds
         this.grounds = this.add.physicsGroup();
         for (let y = 240; y < this.world.height; y += 16) {
@@ -21,10 +22,12 @@ Vakond.Game.prototype = {
         this.grounds.setAll('body.immovable', true);
         // Gems
         this.gems = this.add.physicsGroup();
-        for (let counter = 0; counter < 30; counter++) {
-            let x = this.rnd.between(0, this.world.width);
-            let y = this.rnd.between(240, this.world.height);
-            var gem = this.gems.create(x, y, 'gem');
+        for (let counter = 0; counter < 100; counter++) {
+            //let x = this.rnd.between(0, this.world.width);
+            let x = Math.floor(Math.random() * (this.world.width - 0 + 1)) + 0;
+            //let y = this.rnd.between(240, this.world.height);
+            let y = Math.floor(Math.random() * (this.world.height - 260 + 1)) + 260;
+            var gem = this.gems.create(x, y, 'gems', Math.floor(Math.random() * (3 - 0 + 1)) + 0);
             gem.scale.setTo(2, 2);
         }
         this.gems.setAll('body.allowGravity', false);
@@ -108,7 +111,7 @@ Vakond.Game.prototype = {
             ground.kill();
             this.groundStorm(ground.x, ground.y);
             this.fuelUsage(0.1);
-        } else if (cursors.left.isDown && playerUnderground && ground.body.touching.right && !ground.body.touching.up) {
+        } else if (cursors.left.isDown && playerUnderground && ground.body.touching.right) {
             ground.kill();
             this.groundStorm(ground.x, ground.y);
             this.fuelUsage(0.1);
