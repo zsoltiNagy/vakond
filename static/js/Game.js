@@ -90,7 +90,7 @@ Vakond.Game.prototype = {
         // Score
         this.playerScore = 0;
         scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '12px', fill: '#000' });
-        scoreText.text = 'Score: ' + this.playerScore;
+        scoreText.text = 'Score: ' + (this.playerScore).toFixed(2);
         scoreText.fixedToCamera = true;
         // Ground Particle Emitter
         this.groundParticleEmitter = this.add.emitter();
@@ -135,11 +135,11 @@ Vakond.Game.prototype = {
     gemPicker: function(player, gem) {
         gem.kill()
         this.playerScore += 10;
-        scoreText.text = 'Score: ' + this.playerScore;
+        scoreText.text = 'Score: ' + (this.playerScore).toFixed(2);
     },
 
     fuelUsage: function(number) {
-        this.playerFuel -= number
+        this.playerFuel = (this.playerFuel - number).toFixed(2);
         playerFuelText.text= 'playerFuel: ' + this.playerFuel
     },
 
@@ -153,7 +153,7 @@ Vakond.Game.prototype = {
             this.playerFuel += money;
             this.playerScore = 0;
         }
-        scoreText.text = 'Score: ' + this.playerScore;
+        scoreText.text = 'Score: ' + (this.playerScore).toFixed(2);
         playerFuelText.text= 'playerFuel: ' + this.playerFuel;
     },
 
@@ -167,13 +167,13 @@ Vakond.Game.prototype = {
             this.playerHull += money;
             this.playerScore = 0;
         }
-        scoreText.text = 'Score: ' + this.playerScore;
+        scoreText.text = 'Score: ' + (this.playerScore).toFixed(2);
         playerHullText.text= 'playerHull: ' + this.playerHull;
     },
 
     playerHullDamage: function(number) {
         this.playerHull -= number;
-        playerHullText.text = 'playerHull: ' + this.playerHull
+        playerHullText.text = 'playerHull: ' + (this.playerHull).toFixed(2);
         if (this.playerHull <= 0) {
             this.player.kill()
             this.state.start('Game')
@@ -181,7 +181,7 @@ Vakond.Game.prototype = {
     },
 
     playerFall: function(){
-        playerVelocityYText.text = 'playerVelocityY: ' + this.player.body.velocity.y;
+        playerVelocityYText.text = 'playerVelocityY: ' + (this.player.body.velocity.y).toFixed(2);
         if (this.player.body.velocity.y > 500) {
             let damage = (this.player.body.velocity.y - 500) / 4
             this.playerHullDamage(damage);
